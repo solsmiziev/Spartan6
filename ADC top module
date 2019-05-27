@@ -1,0 +1,15 @@
+module Top
+(
+    input wire clk, reset, launch,
+	 output wire [6:0] led
+);
+
+launch_reset wrapper
+(
+	.clk(clk),
+	.reset(reset),
+	.launch (launch),
+	.dividerr(led)
+);
+
+endmodule
