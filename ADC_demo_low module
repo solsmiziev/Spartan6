@@ -1,0 +1,61 @@
+module launch_reset
+
+(
+	input wire clk,
+	input wire reset,
+	input wire launch,
+	output reg [6:0] dividerr = 7'b0000000
+);
+
+reg store = 1'b1;
+integer counter = 1'b0;
+always@(posedge clk)
+begin
+	if (~reset) 
+	begin
+		store<=1'b0;
+	end
+	if (~launch)
+	begin
+		store<=1'b1;
+	end
+end
+
+
+always@(posedge clk)	
+begin
+	case (store)
+	1'b0:
+			begin
+			dividerr<=7'b0000000;
+			counter<=0;
+			end
+	1'b1:
+	begin
+		if (counter == 13000000)
+		begin 
+		counter<=0;
+		end
+		else begin
+		counter<= counter + 1'b1;
+		end
+		case (counter)
+		1000000: dividerr<= 7'b0000001;
+		2000000: dividerr<= 7'b0000010;
+		3000000: dividerr<= 7'b0000100;
+		4000000: dividerr<= 7'b0001000;	
+		5000000: dividerr<= 7'b0010000;
+		6000000: dividerr<= 7'b0100000;
+		7000000: dividerr<= 7'b1000000;
+		8000000: dividerr<= 7'b0100000;
+		9000000: dividerr<= 7'b0010000;
+		10000000: dividerr<= 7'b0001000;
+		11000000: dividerr<= 7'b0000100;
+		12000000: dividerr<= 7'b0000010;
+		13000000: dividerr<= 7'b0000001;
+
+		endcase 
+	 end
+endcase
+end
+endmodule
